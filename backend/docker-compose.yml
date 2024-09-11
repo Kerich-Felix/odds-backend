@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: ms_ps_sql_odds
+    image: postgres
+    environment:
+      POSTGRES_USER: kerich
+      POSTGRES_PASSWORD: kerichfelix
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: ms_pgadmin_odds
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-pgadmin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - 5050:80
+    networks:
+      - microservices-net
+    restart: unless-stopped
+  mail-dev:
+    container_name: ms_mail_odds
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+    networks:
+      - microservices-net
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
+
+
+
+# version: '3.8'
+
+# services:
+#   db:
+#     image: postgres:14
+#     container_name: my-postgres-db
+#     environment:
+#       POSTGRES_DB: postgres
+#       POSTGRES_USER: postgres.ssnvhjkpaayshfivauxp
+#       POSTGRES_PASSWORD: 8088861fF%ODDSSTORE
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+#   app:
+#     image: my-spring-boot-app
+#     container_name: my-spring-boot-app
+#     depends_on:
+#       - db
+#     ports:
+#       - "1010:1010"
+#     environment:
+#       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres?sslmode=require
+#       SPRING_DATASOURCE_USERNAME: postgres.ssnvhjkpaayshfivauxp
+#       SPRING_DATASOURCE_PASSWORD: 8088861fF%ODDSSTORE
+
+# volumes:
+#   postgres_data:
